@@ -1,0 +1,10 @@
+cd backend
+node server.js
+
+cd frontend
+npx react-native start
+npx react-native log-android
+
+
+cd whisper
+python whisper_server.py
