@@ -8,6 +8,7 @@ import TopicListScreen from '../screens/TopicListScreen';
 import TopicReadingsScreen from '../screens/TopicReadingScreen';
 import RecordsByDateScreen from '../screens/RecordsByDateScreen';
 import RecordDetailScreen from '../screens/RecordDetailScreen';
+import CommunityReadingDetailScreen from '../screens/CommunityReadingDetailScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -28,6 +29,10 @@ export default function AppNavigator() {
         component={RecordsByDateScreen}
       />
       <Stack.Screen name="RecordDetailScreen" component={RecordDetailScreen} />
+      <Stack.Screen
+        name="CommunityReadingDetailScreen"
+        component={CommunityReadingDetailScreen}
+      />
     </Stack.Navigator>
   );
 }
