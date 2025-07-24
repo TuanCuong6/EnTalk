@@ -31,7 +31,7 @@ export const submitRecording = async (
 
   const res = await RNFetchBlob.fetch(
     'POST',
-    'http://192.168.100.39:3000/api/reading/record',
+    `${API_READING.defaults.baseURL}/record`,
     {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'multipart/form-data',
@@ -39,8 +39,7 @@ export const submitRecording = async (
     body,
   );
 
-  const json = res.json();
-  return { data: json };
+  return { data: res.json() };
 };
 export const fetchReadingsByTopic = topicId =>
   API_READING.get(`/topic/${topicId}`);
