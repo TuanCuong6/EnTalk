@@ -9,7 +9,8 @@ import TopicReadingsScreen from '../screens/TopicReadingScreen';
 import RecordsByDateScreen from '../screens/RecordsByDateScreen';
 import RecordDetailScreen from '../screens/RecordDetailScreen';
 import CommunityReadingDetailScreen from '../screens/CommunityReadingDetailScreen';
-
+import EditProfileScreen from '../screens/EditProfileScreen';
+import ChangePasswordScreen from '../screens/ChangePasswordScreen';
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigator() {
@@ -33,6 +34,8 @@ export default function AppNavigator() {
         name="CommunityReadingDetailScreen"
         component={CommunityReadingDetailScreen}
       />
+      <Stack.Screen name="EditProfile" component={EditProfileScreen} />
+      <Stack.Screen name="ChangePassword" component={ChangePasswordScreen} />
     </Stack.Navigator>
   );
 }

@@ -114,3 +114,54 @@ exports.forgotPassword = async (req, res) => {
     res.status(500).json({ message: "Lỗi server", error: err.message });
   }
 };
+
+// 1. Lấy thông tin người dùng
+exports.getProfile = async (req, res) => {
+  const [rows] = await db.execute(
+    "SELECT id, name, email, avatar_url FROM users WHERE id = ?",
+    [req.user.id]
+  );
+  res.json(rows[0]);
+};
+
+// 2. Cập nhật tên và avatar_url
+exports.updateProfile = async (req, res) => {
+  const { name, avatar_url } = req.body;
+  await db.execute("UPDATE users SET name = ?, avatar_url = ? WHERE id = ?", [
+    name,
+    avatar_url,
+    req.user.id,
+  ]);
+  res.json({ message: "Cập nhật thành công" });
+};
+
+// 3. Đổi mật khẩu
+exports.changePassword = async (req, res) => {
+  const { oldPassword, newPassword, confirmPassword } = req.body;
+  if (newPassword !== confirmPassword)
+    return res.status(400).json({ message: "Mật khẩu mới không khớp" });
+
+  const [rows] = await db.execute(
+    "SELECT password_hash FROM users WHERE id = ?",
+    [req.user.id]
+  );
+  const match = await bcrypt.compare(oldPassword, rows[0].password_hash);
+  if (!match) return res.status(400).json({ message: "Sai mật khẩu cũ" });
+
+  const hash = await bcrypt.hash(newPassword, 10);
+  await db.execute("UPDATE users SET password_hash = ? WHERE id = ?", [
+    hash,
+    req.user.id,
+  ]);
+  res.json({ message: "Đổi mật khẩu thành công" });
+};
+
+// 4. Upload avatar → đã dùng cloudinary
+exports.uploadAvatar = async (req, res) => {
+  const avatarUrl = req.file.path;
+  await db.execute("UPDATE users SET avatar_url = ? WHERE id = ?", [
+    avatarUrl,
+    req.user.id,
+  ]);
+  res.json({ message: "Upload thành công", avatar_url: avatarUrl });
+};
