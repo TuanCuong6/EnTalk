@@ -23,6 +23,12 @@ export default function HomeScreen() {
       >
         <Text style={styles.buttonText}>📝 Tự nhập nội dung để luyện</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.chatbotIcon}
+        onPress={() => navigation.navigate('ChatbotScreen')}
+      >
+        <Text style={{ fontSize: 24 }}>🤖</Text>
+      </TouchableOpacity>
     </View>
   );
 }

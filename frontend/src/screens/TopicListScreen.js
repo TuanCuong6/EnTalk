@@ -47,6 +47,7 @@ export default function TopicListScreen() {
         renderItem={({ item }) => (
           <TouchableOpacity
             style={styles.item}
+            activeOpacity={0.7}
             onPress={() =>
               navigation.navigate('TopicReadings', { topic: item })
             }
@@ -54,15 +55,43 @@ export default function TopicListScreen() {
             <Text style={styles.itemText}>• {item.name}</Text>
           </TouchableOpacity>
         )}
+        contentContainerStyle={{ paddingBottom: 20 }}
       />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20 },
-  title: { fontSize: 20, fontWeight: 'bold', marginBottom: 10 },
-  item: { paddingVertical: 10, borderBottomWidth: 1, borderColor: '#ccc' },
-  itemText: { fontSize: 16 },
-  center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#f9f9f9',
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 12,
+    color: '#333',
+  },
+  item: {
+    backgroundColor: '#fff',
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    marginBottom: 10,
+    borderRadius: 10,
+    elevation: 2, // Android shadow
+    shadowColor: '#000', // iOS shadow
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  itemText: {
+    fontSize: 16,
+    color: '#333',
+  },
+  center: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });

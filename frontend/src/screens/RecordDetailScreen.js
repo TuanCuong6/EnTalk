@@ -23,7 +23,10 @@ export default function RecordDetailScreen({ route, navigation }) {
         setDetail(res.data);
       } catch (err) {
         console.error('❌ Lỗi lấy chi tiết record:', err);
-        Alert.alert('Lỗi', 'Không thể tải chi tiết bản ghi.');
+        Alert.alert(
+          '⛔ Thông báo',
+          'Bản ghi đã bị xóa hoặc không còn tồn tại.',
+        );
       } finally {
         setLoading(false);
       }

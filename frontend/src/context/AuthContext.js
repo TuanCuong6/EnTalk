@@ -16,6 +16,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (token, user) => {
+    console.log('🔐 Lưu token:', token);
     await AsyncStorage.setItem('token', token);
     await AsyncStorage.setItem('user', JSON.stringify(user));
     setIsLoggedIn(true);

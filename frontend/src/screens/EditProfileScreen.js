@@ -1,11 +1,15 @@
+//frontend/src/screens/EditProfileScreen.js
 import React, { useEffect, useState } from 'react';
 import {
   View,
   TextInput,
-  Button,
+  Text,
+  TouchableOpacity,
   Image,
   Alert,
   ActivityIndicator,
+  StyleSheet,
+  ScrollView,
 } from 'react-native';
 import { getProfile, updateProfile, uploadAvatar } from '../api/account';
 import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
@@ -87,38 +91,91 @@ export default function EditProfileScreen({ navigation }) {
   };
 
   return (
-    <View style={{ padding: 20, alignItems: 'center' }}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Image
         source={{ uri: uploading ? localPreviewUri : avatar_url }}
-        style={{
-          width: 100,
-          height: 100,
-          borderRadius: 50,
-          marginBottom: 10,
-          backgroundColor: '#ccc',
-        }}
+        style={styles.avatar}
       />
-
       {uploading && <ActivityIndicator size="small" color="#000" />}
 
-      <Button
-        title="Chọn ảnh từ máy"
+      <TouchableOpacity
+        style={styles.imageButton}
         onPress={() => handleImage(launchImageLibrary)}
-      />
-      <Button title="Chụp ảnh mới" onPress={() => handleImage(launchCamera)} />
+      >
+        <Text style={styles.imageButtonText}>Chọn ảnh từ máy</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.imageButton}
+        onPress={() => handleImage(launchCamera)}
+      >
+        <Text style={styles.imageButtonText}>Chụp ảnh mới</Text>
+      </TouchableOpacity>
 
       <TextInput
         placeholder="Tên"
         value={name}
         onChangeText={setName}
-        style={{
-          borderBottomWidth: 1,
-          width: '100%',
-          marginVertical: 20,
-          fontSize: 16,
-        }}
+        style={styles.input}
       />
-      <Button title="Lưu thay đổi" onPress={handleSave} />
-    </View>
+
+      <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+        <Text style={styles.saveButtonText}>Lưu thay đổi</Text>
+      </TouchableOpacity>
+    </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+    paddingTop: 40,
+    alignItems: 'center',
+    backgroundColor: '#f5f5f5',
+    flexGrow: 1,
+  },
+  avatar: {
+    width: 130,
+    height: 130,
+    borderRadius: 65,
+    backgroundColor: '#ccc',
+    marginBottom: 10,
+    borderWidth: 2,
+    borderColor: '#ddd',
+  },
+  imageButton: {
+    backgroundColor: '#4A90E2',
+    paddingVertical: 10,
+    paddingHorizontal: 25,
+    borderRadius: 10,
+    marginVertical: 5,
+    elevation: 2,
+  },
+  imageButtonText: {
+    color: '#fff',
+    fontSize: 14,
+  },
+  input: {
+    width: '100%',
+    backgroundColor: '#fff',
+    padding: 12,
+    borderRadius: 10,
+    fontSize: 16,
+    borderColor: '#ddd',
+    borderWidth: 1,
+    marginVertical: 20,
+  },
+  saveButton: {
+    backgroundColor: '#28a745',
+    paddingVertical: 14,
+    borderRadius: 10,
+    alignItems: 'center',
+    width: '100%',
+    elevation: 2,
+  },
+  saveButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+});

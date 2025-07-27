@@ -12,9 +12,10 @@ import {
 import AudioRecorder from '../components/AudioRecorder';
 import { submitRecording } from '../api/reading';
 
-export default function CustomReadingScreen() {
-  const [customText, setCustomText] = useState('');
-  const [showRecorder, setShowRecorder] = useState(false);
+export default function CustomReadingScreen({ route }) {
+  const { customText: incomingText } = route.params || {};
+  const [customText, setCustomText] = useState(incomingText || '');
+  const [showRecorder, setShowRecorder] = useState(!!incomingText);
 
   const handleStartPractice = () => {
     if (!customText.trim()) {

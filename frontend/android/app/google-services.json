@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "536319388597",
+    "project_id": "entalk5",
+    "storage_bucket": "entalk5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:536319388597:android:064b4f66c9b078ec5dc7fc",
+        "android_client_info": {
+          "package_name": "com.frontend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBj-VQk2PW-ciHfAzLU9XjaDCJilQKXvOE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

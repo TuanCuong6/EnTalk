@@ -8,9 +8,9 @@ import TopicListScreen from '../screens/TopicListScreen';
 import TopicReadingsScreen from '../screens/TopicReadingScreen';
 import RecordsByDateScreen from '../screens/RecordsByDateScreen';
 import RecordDetailScreen from '../screens/RecordDetailScreen';
-import CommunityReadingDetailScreen from '../screens/CommunityReadingDetailScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import ChangePasswordScreen from '../screens/ChangePasswordScreen';
+import ChatbotScreen from '../screens/ChatbotScreen';
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigator() {
@@ -30,12 +30,9 @@ export default function AppNavigator() {
         component={RecordsByDateScreen}
       />
       <Stack.Screen name="RecordDetailScreen" component={RecordDetailScreen} />
-      <Stack.Screen
-        name="CommunityReadingDetailScreen"
-        component={CommunityReadingDetailScreen}
-      />
       <Stack.Screen name="EditProfile" component={EditProfileScreen} />
       <Stack.Screen name="ChangePassword" component={ChangePasswordScreen} />
+      <Stack.Screen name="ChatbotScreen" component={ChatbotScreen} />
     </Stack.Navigator>
   );
 }

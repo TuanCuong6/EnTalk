@@ -2,10 +2,12 @@
 import React, { useEffect, useState } from 'react';
 import {
   View,
-  Button,
+  Text,
+  TouchableOpacity,
   PermissionsAndroid,
   Alert,
   Platform,
+  StyleSheet,
 } from 'react-native';
 import AudioRecord from 'react-native-audio-record';
 import Sound from 'react-native-sound';
@@ -79,16 +81,74 @@ export default function AudioRecorder({ onFinish }) {
   };
 
   return (
-    <View>
-      {!recording ? (
-        <Button title="🎤 Bắt đầu ghi" onPress={startRecording} />
-      ) : (
-        <Button title="⏹️ Dừng ghi" onPress={stopRecording} />
-      )}
+    <View style={styles.container}>
+      <Text style={styles.title}>🎧 Ghi âm bài đọc</Text>
 
-      <View style={{ marginTop: 10 }}>
-        <Button title="▶️ Nghe lại" onPress={play} disabled={!audioFile} />
-      </View>
+      <TouchableOpacity
+        style={[
+          styles.button,
+          recording ? styles.stopButton : styles.startButton,
+        ]}
+        onPress={recording ? stopRecording : startRecording}
+      >
+        <Text style={styles.buttonText}>
+          {recording ? '⏹️ Dừng ghi' : '🎤 Bắt đầu ghi'}
+        </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={[
+          styles.button,
+          !audioFile ? styles.disabledButton : styles.playButton,
+        ]}
+        onPress={play}
+        disabled={!audioFile}
+      >
+        <Text style={styles.buttonText}>▶️ Nghe lại</Text>
+      </TouchableOpacity>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: 'center',
+    paddingVertical: 20,
+    paddingHorizontal: 16,
+    backgroundColor: '#f7f7f7',
+    borderRadius: 12,
+    margin: 10,
+    elevation: 3,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    color: '#333',
+  },
+  button: {
+    paddingVertical: 14,
+    paddingHorizontal: 24,
+    borderRadius: 30,
+    marginVertical: 10,
+    width: '80%',
+    alignItems: 'center',
+  },
+  startButton: {
+    backgroundColor: '#4caf50',
+  },
+  stopButton: {
+    backgroundColor: '#f44336',
+  },
+  playButton: {
+    backgroundColor: '#2196f3',
+  },
+  disabledButton: {
+    backgroundColor: '#ccc',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+});

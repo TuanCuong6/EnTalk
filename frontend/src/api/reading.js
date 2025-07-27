@@ -2,10 +2,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_READING, API_TOPIC } from './apiConfig';
 import RNFetchBlob from 'react-native-blob-util';
-// ✅ GET tất cả bài đọc mẫu
+// GET tất cả bài đọc mẫu
 export const fetchAllReadings = () => API_READING.get('/all');
 
-// 📤 POST file ghi âm + ID bài đọc
+//POST file ghi âm + ID bài đọc
 export const submitRecording = async (
   filePath,
   readingId,
@@ -44,3 +44,10 @@ export const submitRecording = async (
 export const fetchReadingsByTopic = topicId =>
   API_READING.get(`/topic/${topicId}`);
 export const fetchAllTopics = () => API_TOPIC.get('/');
+
+export const getReadingById = async id => {
+  const token = await AsyncStorage.getItem('token');
+  return API_READING.get(`/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};

@@ -7,7 +7,7 @@ import { AuthContext } from '../context/AuthContext';
 export default function MainNavigator() {
   const { isLoggedIn } = useContext(AuthContext);
 
-  if (isLoggedIn === null) return null; // loading
+  if (isLoggedIn === null) return null;
 
   return isLoggedIn ? <AppNavigator /> : <AuthStack />;
 }
