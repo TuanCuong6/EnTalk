@@ -61,7 +61,6 @@ async function scoreWithGemini(transcript, originalText = null) {
     const text = response.data.candidates?.[0]?.content?.parts?.[0]?.text || "";
     console.log("🎯 Gemini response:", text);
 
-    // 👉 Tách JSON thật từ block ```json ... ```
     let cleaned = text;
     const match = text.match(/```json([\s\S]*?)```/);
     if (match) cleaned = match[1].trim();

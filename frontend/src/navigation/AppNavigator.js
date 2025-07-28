@@ -11,6 +11,7 @@ import RecordDetailScreen from '../screens/RecordDetailScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import ChangePasswordScreen from '../screens/ChangePasswordScreen';
 import ChatbotScreen from '../screens/ChatbotScreen';
+import ScanTextScreen from '../screens/ScanTextScreen';
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigator() {
@@ -33,6 +34,7 @@ export default function AppNavigator() {
       <Stack.Screen name="EditProfile" component={EditProfileScreen} />
       <Stack.Screen name="ChangePassword" component={ChangePasswordScreen} />
       <Stack.Screen name="ChatbotScreen" component={ChatbotScreen} />
+      <Stack.Screen name="ScanTextScreen" component={ScanTextScreen} />
     </Stack.Navigator>
   );
 }

@@ -5,6 +5,5 @@ cd frontend
 npx react-native start
 npx react-native log-android
 
-
 cd whisper
 python whisper_server.py

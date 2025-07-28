@@ -46,7 +46,7 @@ export default function NotificationScreen() {
   );
 
   const handlePress = async item => {
-    console.log('🔍 Thông báo được ấn:', item); // ✅ THÊM DÒNG NÀY
+    console.log('🔍 Thông báo được ấn:', item);
     try {
       await markNotificationAsRead(item.id);
       fetchUnreadCount();
