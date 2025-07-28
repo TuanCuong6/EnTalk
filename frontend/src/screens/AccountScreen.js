@@ -56,6 +56,13 @@ export default function AccountScreen({ navigation }) {
         >
           Đổi mật khẩu
         </Button>
+        <Button
+          mode="contained"
+          onPress={() => navigation.navigate('Feedback')}
+          style={styles.button}
+        >
+          🧪 Góp ý / Báo lỗi
+        </Button>
 
         <Surface style={styles.themeToggle}>
           <Text style={{ color: colors.onSurface, marginBottom: 8 }}>

@@ -12,6 +12,7 @@ import EditProfileScreen from '../screens/EditProfileScreen';
 import ChangePasswordScreen from '../screens/ChangePasswordScreen';
 import ChatbotScreen from '../screens/ChatbotScreen';
 import ScanTextScreen from '../screens/ScanTextScreen';
+import FeedbackScreen from '../screens/FeedbackScreen';
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigator() {
@@ -35,6 +36,11 @@ export default function AppNavigator() {
       <Stack.Screen name="ChangePassword" component={ChangePasswordScreen} />
       <Stack.Screen name="ChatbotScreen" component={ChatbotScreen} />
       <Stack.Screen name="ScanTextScreen" component={ScanTextScreen} />
+      <Stack.Screen
+        name="Feedback"
+        component={FeedbackScreen}
+        options={{ title: 'Góp ý / Báo lỗi' }}
+      />
     </Stack.Navigator>
   );
 }

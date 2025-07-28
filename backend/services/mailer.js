@@ -29,3 +29,23 @@ exports.sendNewPasswordEmail = async (to, newPassword) => {
   };
   await transporter.sendMail(mailOptions);
 };
+
+exports.sendFeedbackEmail = async ({ fromUser, userId, content, file }) => {
+  const mailOptions = {
+    from: `"EnTalk Feedback" <${process.env.MAIL_USER}>`,
+    to: "vubatuancuong2306@gmail.com",
+    subject: `🧪 Góp ý từ người dùng EnTalk`,
+    text: `Người dùng: ${fromUser} (ID: ${userId})\n\nNội dung góp ý:\n${content}`,
+    attachments: [],
+  };
+
+  if (file) {
+    mailOptions.attachments.push({
+      filename: file.originalname || "screenshot.jpg",
+      content: file.buffer,
+      contentType: file.mimetype,
+    });
+  }
+
+  await transporter.sendMail(mailOptions);
+};

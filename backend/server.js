@@ -12,6 +12,7 @@ const historyRoutes = require("./routes/history");
 const notificationRoutes = require("./routes/notification");
 const recommendationRoutes = require("./routes/recommendation");
 const chatRoutes = require("./routes/chat");
+const feedbackRoutes = require("./routes/feedback");
 app.use(cors());
 app.use(express.json());
 
@@ -24,6 +25,7 @@ app.use("/api/history", historyRoutes);
 app.use("/api/notification", notificationRoutes);
 app.use("/api/recommend", recommendationRoutes);
 app.use("/api/chat", chatRoutes);
+app.use("/api/feedback", feedbackRoutes);
 
 app.listen(3000, () => {
   console.log("✅ Server is running on port 3000");
