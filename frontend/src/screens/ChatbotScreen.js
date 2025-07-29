@@ -11,6 +11,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { askChatbot, fetchChatHistory } from '../api/chat';
+import LinearGradient from 'react-native-linear-gradient';
 
 export default function ChatbotScreen() {
   const [question, setQuestion] = useState('');
@@ -21,6 +22,10 @@ export default function ChatbotScreen() {
   useEffect(() => {
     loadHistory();
   }, []);
+
+  useEffect(() => {
+    flatListRef.current?.scrollToEnd({ animated: true });
+  }, [messages]);
 
   const loadHistory = async () => {
     try {
@@ -66,10 +71,6 @@ export default function ChatbotScreen() {
       console.error('Lỗi khi gửi câu hỏi:', err.message);
     } finally {
       setLoading(false);
-      setTimeout(
-        () => flatListRef.current?.scrollToEnd({ animated: true }),
-        300,
-      );
     }
   };
 
@@ -91,6 +92,12 @@ export default function ChatbotScreen() {
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
+      {/* Nền gradient nhẹ */}
+      <LinearGradient
+        colors={['#F0F7FF', '#E6FCFF']}
+        style={StyleSheet.absoluteFill}
+      />
+
       <Text style={styles.title}>🤖 Hỏi EnTalk về tiếng Anh</Text>
 
       <FlatList
@@ -104,9 +111,10 @@ export default function ChatbotScreen() {
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
-          placeholder="Nhập câu hỏi liên quan đến tiếng Anh..."
+          placeholder="Nhập câu hỏi liên quan đến tiếng Anh"
           value={question}
           onChangeText={setQuestion}
+          placeholderTextColor="#888"
         />
         <TouchableOpacity
           style={styles.sendButton}
@@ -127,50 +135,57 @@ export default function ChatbotScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fdfdfd',
-    paddingTop: 50,
+    paddingTop: 60,
     paddingHorizontal: 16,
+    backgroundColor: '#F0F7FF',
   },
   title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 12,
+    fontSize: 22,
+    fontWeight: '800',
+    color: '#5E72EB',
     textAlign: 'center',
+    marginBottom: 16,
   },
   list: {
-    paddingBottom: 80,
+    paddingBottom: 100,
   },
   chatBlock: {
-    backgroundColor: '#f0f0f0',
-    borderRadius: 10,
-    padding: 10,
+    borderRadius: 16,
+    padding: 12,
     marginVertical: 6,
     maxWidth: '80%',
+    shadowColor: '#000',
+    shadowOpacity: 0.06,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 2,
   },
   alignLeft: {
     alignSelf: 'flex-start',
+    backgroundColor: 'rgba(255,255,255,0.8)',
   },
   alignRight: {
     alignSelf: 'flex-end',
-    backgroundColor: '#d0e8ff',
+    backgroundColor: '#DDE9FF',
   },
   userText: {
-    fontWeight: 'bold',
-    color: '#003366',
+    fontWeight: '600',
+    color: '#34495E',
+    fontSize: 15,
   },
   botText: {
     color: '#333',
+    fontSize: 15,
   },
   inputContainer: {
     flexDirection: 'row',
     position: 'absolute',
-    bottom: 10,
+    bottom: 20,
     left: 16,
     right: 16,
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(255,255,255,0.95)',
     borderRadius: 30,
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: 10,
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 2 },
@@ -179,13 +194,15 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    height: 40,
+    fontSize: 14,
+    color: '#333',
+    paddingVertical: Platform.OS === 'ios' ? 10 : 8,
   },
   sendButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#5E72EB',
     borderRadius: 20,
     paddingHorizontal: 16,
-    paddingVertical: 6,
+    paddingVertical: 8,
     marginLeft: 8,
   },
   sendText: {

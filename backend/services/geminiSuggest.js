@@ -4,7 +4,6 @@ const axios = require("axios");
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-pro:generateContent?key=${GEMINI_API_KEY}`;
 
-// 🔥 Prompt sinh gợi ý luyện tập
 const PROMPT_TEMPLATE = `
 Bạn là chuyên gia huấn luyện phát âm tiếng Anh.
 

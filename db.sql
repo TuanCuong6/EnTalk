@@ -10,9 +10,10 @@ CREATE TABLE users (
     password_hash VARCHAR(255) NOT NULL,                   -- Mật khẩu đã mã hoá
     level ENUM('A1','A2','B1','B2','C1','C2') DEFAULT 'A1', -- Trình độ tiếng Anh mặc định
     avatar_url TEXT,                                       -- Ảnh đại diện (tuỳ chọn)
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP, 
-    is_verified BOOLEAN DEFAULT FALSE,
-    fcm_token TEXT
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,          -- thời điểm tạo tài khoản
+    is_verified BOOLEAN DEFAULT FALSE,                     -- xác thực email chưa 
+    fcm_token TEXT,
+    last_suggestion_type INT DEFAULT 0                      -- xoay vòng tiêu chí 0-4 để nhận thông báo
 );
 
 -- 2. Bảng chủ đề bài đọc (du lịch, khoa học, tin tức,...)
@@ -104,7 +105,7 @@ CREATE TABLE notifications (
     record_id INT
 );
 
-ALTER TABLE users ADD COLUMN last_suggestion_type INT DEFAULT 0; -- xoay vòng tiêu chí 0-4 
+
 
 CREATE TABLE chat_messages (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -116,14 +117,12 @@ CREATE TABLE chat_messages (
 );
 
 
-SELECT * FROM notifications WHERE id = 35;
-
-
 -- Thêm chủ đề mẫu
 INSERT INTO topics (name, description) VALUES 
 ('Du lịch', 'Bài đọc liên quan đến du lịch và khám phá'),
 ('Khoa học', 'Thông tin khoa học thường thức'),
 ('Tin tức', 'Bài đọc về các bản tin tiếng Anh ngắn');
+
 
 -- Thêm bài đọc mẫu
 INSERT INTO readings (content, level, topic_id, is_community_post) VALUES 
@@ -131,11 +130,7 @@ INSERT INTO readings (content, level, topic_id, is_community_post) VALUES
 ('Water is made of two elements: hydrogen and oxygen. It is essential for life on Earth.', 'A2', 2, FALSE),
 ('The stock market had a surprising increase yesterday, with major tech companies reporting record profits.', 'B1', 3, FALSE);
 
-SELECT * FROM records WHERE user_id =2 ;
 
-SELECT * FROM records WHERE id = 17;
-SELECT * FROM readings WHERE id = 2;
-select * from topics
 INSERT INTO topics (name, description) VALUES 
 ('Khám phá', 'Bài đọc liên quan đến du lịch và khám phá'),
 ('Thám hiểm', 'Thông tin khoa học về thám hiểm');
@@ -168,3 +163,25 @@ INSERT INTO readings (content, level, topic_id, is_community_post)
 VALUES 
 ('Some explorers travel to the North Pole. It is very cold and full of snow.', 'A1', 5, FALSE),
 ('Astronauts explore space to learn more about the stars and planets.', 'A1', 5, FALSE);
+
+INSERT INTO topics (name, description) VALUES 
+('Sức khỏe và đời sống', 'Bài đọc về sức khỏe, lối sống lành mạnh, thể thao, ăn uống'),
+('Học tập và trường học', 'Chủ đề về việc học, giáo viên, lớp học, và cuộc sống học đường'),
+('Gia đình và bạn bè', 'Miêu tả người thân, bạn bè và các hoạt động hàng ngày');
+
+INSERT INTO readings (content, level, topic_id, is_community_post)
+VALUES 
+('I eat fruits and vegetables every day. They help me stay healthy. I drink water instead of soda. I go for a walk after dinner.', 'A1', 6, FALSE),
+('Sleep is important for our body. I try to sleep eight hours every night. When I sleep well, I feel happy. My brain works better, too.', 'A1', 6, FALSE),
+('Exercise is good for the heart. I go jogging in the park three times a week. Sometimes I ride my bike to school. It makes me feel strong.', 'A2', 6, FALSE);
+
+INSERT INTO readings (content, level, topic_id, is_community_post)
+VALUES 
+('I go to school from Monday to Friday. My favorite subject is English. I like to read and write in class. The teacher is very kind.', 'A1', 7, FALSE),
+('We have a big library in our school. I borrow books every week. I enjoy reading stories about animals. Reading helps me learn new words.', 'A1', 7, FALSE),
+('Math is sometimes hard for me. But I study with my friends after class. We help each other solve problems. Teamwork makes it easier.', 'A2', 7, FALSE);
+INSERT INTO readings (content, level, topic_id, is_community_post)
+VALUES 
+('I live with my parents and my little brother. We eat dinner together every night. On weekends, we go to the park. We play and laugh a lot.', 'A1', 8, FALSE),
+('My best friend is Anna. She is funny and smart. We go to the same school. We like to draw and play games together.', 'A1', 8, FALSE),
+('Every Sunday, my family visits my grandparents. Grandma cooks delicious food. We talk and watch TV together. I love spending time with them.', 'A2', 8, FALSE);

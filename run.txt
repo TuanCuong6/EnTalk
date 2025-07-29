@@ -1,9 +1,16 @@
+-- terminal 1: 
 cd backend
 node server.js
 
-cd frontend
-npx react-native start
-npx react-native log-android
-
+--terminal 2:
 cd whisper
 python whisper_server.py
+
+-- terminal 3:
+cd frontend
+npx react-native run-android
+
+-- terminal 4:
+cd frontend
+npx react-native log-android (xem log react native)
+

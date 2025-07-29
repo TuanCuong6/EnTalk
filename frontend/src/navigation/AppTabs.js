@@ -1,5 +1,5 @@
 // frontend/src/navigation/AppTabs.js
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useCallback } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import HomeScreen from '../screens/HomeScreen';
@@ -7,22 +7,18 @@ import NotificationScreen from '../screens/NotificationScreen';
 import HistoryScreen from '../screens/HistoryScreen';
 import AccountScreen from '../screens/AccountScreen';
 import { NotificationContext } from '../context/NotificationContext';
-import { navigationRef } from '../utils/RootNavigation';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
 
 export default function AppTabs() {
   const { unreadCount, fetchUnreadCount } = useContext(NotificationContext);
 
-  useEffect(() => {
-    const unsubscribe = navigationRef.addListener('state', () => {
-      const currentRoute = navigationRef.getCurrentRoute();
-      if (currentRoute?.name === 'Notification') {
-        fetchUnreadCount();
-      }
-    });
-    return unsubscribe;
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchUnreadCount();
+    }, []),
+  );
 
   return (
     <Tab.Navigator
@@ -56,7 +52,6 @@ export default function AppTabs() {
           tabBarBadge: unreadCount > 0 ? unreadCount : undefined,
         }}
       />
-
       <Tab.Screen name="Account" component={AccountScreen} />
     </Tab.Navigator>
   );

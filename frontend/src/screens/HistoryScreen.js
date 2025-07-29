@@ -1,4 +1,3 @@
-//frontend/src/screens/HistoryScreen.js
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import {
   View,
@@ -25,7 +24,6 @@ export default function HistoryScreen({ navigation }) {
   const [range, setRange] = useState('7');
   const [chartData, setChartData] = useState(null);
   const [loadingChart, setLoadingChart] = useState(true);
-
   const [topics, setTopics] = useState([{ id: null, name: 'Tất cả' }]);
   const [selectedTopic, setSelectedTopic] = useState(null);
   const [records, setRecords] = useState([]);
@@ -135,7 +133,6 @@ export default function HistoryScreen({ navigation }) {
         limit,
         page: 1,
       });
-
       setRecords(res.data.records);
       setHasMore(res.data.records.length === limit);
       setPage(res.data.records.length === limit ? 2 : 1);
@@ -155,19 +152,10 @@ export default function HistoryScreen({ navigation }) {
         limit,
         page,
       });
-      console.log(
-        '📤 Server trả:',
-        res.data.records.map(r => r.id),
-      );
-      console.log(
-        '🔍 Existing IDs:',
-        records.map(r => r.id),
-      );
       const existingIds = new Set(records.map(r => r.id));
       const newRecords = res.data.records.filter(r => !existingIds.has(r.id));
 
       if (newRecords.length === 0) {
-        console.log('⛔ Không có dữ liệu mới, ngừng tải thêm.');
         setHasMore(false);
       } else {
         setRecords(prev => [...prev, ...newRecords]);
@@ -186,58 +174,54 @@ export default function HistoryScreen({ navigation }) {
     loadInitialRecords().finally(() => setRefreshing(false));
   }, [range, selectedTopic]);
 
-  const renderItem = ({ item }) => {
-    const datetime = new Date(item.created_at).toLocaleString();
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          if (!item?.id) {
-            Alert.alert('Lỗi', 'Không tìm thấy bản ghi hợp lệ');
-            return;
-          }
-          navigation.navigate('RecordDetailScreen', { recordId: item.id });
-        }}
-        style={styles.item}
-      >
-        <View style={{ flex: 1 }}>
-          <Text style={styles.title}>{item.content?.slice(0, 50)}...</Text>
-          <Text style={styles.info}>
-            {new Date(item.created_at).toLocaleString()}
-          </Text>
-          <Text style={styles.info}>
-            Chủ đề: {item.topic_name || 'Không có'}
-          </Text>
-        </View>
-        <View style={{ alignItems: 'center' }}>
-          <Text style={styles.score}>
-            {item.score_overall?.toFixed(1) ?? '-'}
-          </Text>
-          <Text style={styles.retry}>🔁 Luyện lại</Text>
-        </View>
-      </TouchableOpacity>
-    );
-  };
+  const renderItem = ({ item }) => (
+    <TouchableOpacity
+      onPress={() => {
+        if (!item?.id) {
+          Alert.alert('Lỗi', 'Không tìm thấy bản ghi hợp lệ');
+          return;
+        }
+        navigation.navigate('RecordDetailScreen', { recordId: item.id });
+      }}
+      style={styles.item}
+    >
+      <View style={{ flex: 1 }}>
+        <Text style={styles.title}>{item.content?.slice(0, 50)}...</Text>
+        <Text style={styles.info}>
+          {new Date(item.created_at).toLocaleString()}
+        </Text>
+        <Text style={styles.info}>Chủ đề: {item.topic_name || 'Không có'}</Text>
+      </View>
+      <View style={{ alignItems: 'center' }}>
+        <Text style={styles.score}>
+          {item.score_overall?.toFixed(1) ?? '-'}
+        </Text>
+        <Text style={styles.retry}>🔁 Luyện lại</Text>
+      </View>
+    </TouchableOpacity>
+  );
 
   const renderHeader = () => (
     <View>
-      <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 12 }}>
-        📈 Tiến bộ luyện tập ({range} ngày gần đây)
+      <Text style={styles.sectionTitle}>
+        📈 Tiến độ luyện tập ({range} ngày gần đây)
       </Text>
 
-      <View style={{ flexDirection: 'row', marginBottom: 12 }}>
+      <View style={styles.rangeContainer}>
         {RANGE_OPTIONS.map(opt => (
           <TouchableOpacity
             key={opt.value}
             onPress={() => setRange(opt.value)}
-            style={{
-              paddingHorizontal: 12,
-              paddingVertical: 6,
-              marginRight: 10,
-              backgroundColor: range === opt.value ? '#007AFF' : '#eee',
-              borderRadius: 8,
-            }}
+            style={[
+              styles.rangeOption,
+              range === opt.value && styles.rangeOptionSelected,
+            ]}
           >
-            <Text style={{ color: range === opt.value ? '#fff' : '#333' }}>
+            <Text
+              style={{
+                color: range === opt.value ? '#fff' : '#333',
+              }}
+            >
               {opt.label}
             </Text>
           </TouchableOpacity>
@@ -264,18 +248,17 @@ export default function HistoryScreen({ navigation }) {
                 width={Math.max(screenWidth, chartData.labels.length * 50)}
                 height={220}
                 fromZero
-                yAxisSuffix=""
                 chartConfig={{
                   backgroundColor: '#fff',
                   backgroundGradientFrom: '#fff',
                   backgroundGradientTo: '#fff',
                   decimalPlaces: 1,
-                  color: (opacity = 1) => `rgba(0, 122, 255, ${opacity})`,
+                  color: (opacity = 1) => `rgba(94, 114, 235, ${opacity})`,
                   labelColor: () => '#333',
                   propsForDots: {
                     r: '4',
                     strokeWidth: '2',
-                    stroke: '#007AFF',
+                    stroke: '#5E72EB',
                   },
                 }}
                 bezier
@@ -290,17 +273,12 @@ export default function HistoryScreen({ navigation }) {
             </View>
           </ScrollView>
 
+          <Text style={styles.chartHint}>
+            📍 Ấn vào biểu đồ để xem chi tiết lịch sử
+          </Text>
+
           {chartData.scores.every(score => score === null) && (
-            <Text
-              style={{
-                position: 'absolute',
-                top: 100,
-                width: '100%',
-                textAlign: 'center',
-                fontSize: 16,
-                color: '#888',
-              }}
-            >
+            <Text style={styles.emptyText}>
               ⛔ Chưa có dữ liệu trong khoảng thời gian này
             </Text>
           )}
@@ -335,6 +313,7 @@ export default function HistoryScreen({ navigation }) {
       />
     </View>
   );
+
   return (
     <FlatList
       ref={flatListRef}
@@ -376,6 +355,43 @@ export default function HistoryScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 12,
+    color: '#5E72EB',
+    textAlign: 'center',
+  },
+  rangeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 12,
+  },
+  rangeOption: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    marginRight: 10,
+    backgroundColor: '#eee',
+    borderRadius: 12,
+  },
+  rangeOptionSelected: {
+    backgroundColor: '#5E72EB',
+  },
+  chartHint: {
+    textAlign: 'center',
+    fontSize: 14,
+    color: '#6C757D',
+    marginTop: 12,
+    marginBottom: 8,
+  },
+  emptyText: {
+    position: 'absolute',
+    top: 100,
+    width: '100%',
+    textAlign: 'center',
+    fontSize: 16,
+    color: '#888',
+  },
   topicTab: {
     paddingHorizontal: 12,
     paddingVertical: 6,
@@ -384,11 +400,11 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   topicTabSelected: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#5E72EB',
   },
   item: {
     padding: 12,
-    backgroundColor: '#f8f8f8',
+    backgroundColor: '#f0f4ff',
     borderRadius: 12,
     marginBottom: 10,
     flexDirection: 'row',
@@ -398,19 +414,20 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 4,
     fontSize: 15,
+    color: '#333',
   },
   info: {
-    color: '#555',
+    color: '#6C757D',
     fontSize: 13,
   },
   score: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#007AFF',
+    color: '#5E72EB',
   },
   retry: {
     fontSize: 13,
-    color: '#007AFF',
+    color: '#5E72EB',
     marginTop: 4,
   },
 });

@@ -69,7 +69,14 @@ async function scoreWithGemini(transcript, originalText = null) {
     return parsed;
   } catch (err) {
     console.error("❌ Lỗi gọi Gemini:", err.response?.data || err.message);
-    throw new Error("Không thể chấm điểm với Gemini");
+    // throw new Error("Không thể chấm điểm với Gemini");
+    if (err.response?.status === 429) {
+      throw new Error("Hệ thống đang quá tải, vui lòng thử lại sau.");
+    } else if (err.response?.status >= 500) {
+      throw new Error("Lỗi từ phía Gemini, vui lòng thử lại sau.");
+    } else {
+      throw new Error("Không thể chấm điểm với Gemini lúc này.");
+    }
   }
 }
 

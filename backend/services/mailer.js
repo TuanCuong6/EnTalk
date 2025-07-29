@@ -33,7 +33,7 @@ exports.sendNewPasswordEmail = async (to, newPassword) => {
 exports.sendFeedbackEmail = async ({ fromUser, userId, content, file }) => {
   const mailOptions = {
     from: `"EnTalk Feedback" <${process.env.MAIL_USER}>`,
-    to: "vubatuancuong2306@gmail.com",
+    to: "vubatuancuong2306@gmail.com", //thay bằng email các bạn muốn nhận được thông báo
     subject: `🧪 Góp ý từ người dùng EnTalk`,
     text: `Người dùng: ${fromUser} (ID: ${userId})\n\nNội dung góp ý:\n${content}`,
     attachments: [],

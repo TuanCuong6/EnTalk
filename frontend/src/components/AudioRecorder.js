@@ -58,7 +58,6 @@ export default function AudioRecorder({ onFinish }) {
     AudioRecord.start();
     setRecording(true);
     setAudioFile(null);
-    Alert.alert('🎤 Bắt đầu ghi');
   };
 
   const stopRecording = async () => {
@@ -66,7 +65,6 @@ export default function AudioRecorder({ onFinish }) {
     setRecording(false);
     setAudioFile(filePath);
     onFinish?.(filePath);
-    Alert.alert('✅ Ghi xong', filePath);
   };
 
   const play = () => {
