@@ -54,7 +54,7 @@ CREATE TABLE records (
     FOREIGN KEY (reading_id) REFERENCES readings(id) ON DELETE CASCADE
 );
 
--- hi tiết lỗi phát âm cho mỗi bài đọc (nếu dùng AI phân tích sâu)
+-- chi tiết lỗi phát âm cho mỗi bài đọc (nếu dùng AI phân tích sâu)
 CREATE TABLE record_feedback (
     id INT AUTO_INCREMENT PRIMARY KEY,
     record_id INT NOT NULL,                                -- Bản ghi thuộc bài đọc nào
@@ -90,7 +90,7 @@ CREATE TABLE email_verifications (
     expires_at DATETIME NOT NULL
 );
 
-
+-- bảng thông báo
 CREATE TABLE notifications (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,                                      -- Gửi cho người dùng cụ thể
@@ -104,7 +104,6 @@ CREATE TABLE notifications (
     FOREIGN KEY (reading_id) REFERENCES readings(id) ON DELETE SET NULL,
     record_id INT
 );
-
 
 
 CREATE TABLE chat_messages (

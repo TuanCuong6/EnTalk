@@ -49,7 +49,12 @@ export default function AppTabs() {
         name="Notification"
         component={NotificationScreen}
         options={{
-          tabBarBadge: unreadCount > 0 ? unreadCount : undefined,
+          tabBarBadge:
+            unreadCount > 0
+              ? unreadCount > 9
+                ? '9+'
+                : unreadCount
+              : undefined,
         }}
       />
       <Tab.Screen name="Account" component={AccountScreen} />

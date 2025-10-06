@@ -1,5 +1,4 @@
 //frontend/src/screens/EditProfileScreen.js
-//frontend/src/screens/EditProfileScreen.js
 import React, { useState, useEffect, useRef } from 'react';
 import {
   View,

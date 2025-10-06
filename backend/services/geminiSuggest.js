@@ -12,13 +12,14 @@ Tôi sẽ cung cấp cho bạn lịch sử đọc gần đây của một ngư�
 Hãy phân tích điểm mạnh và điểm yếu, sau đó đề xuất:
 - Một kỹ năng cần cải thiện (chỉ chọn 1 trong các kỹ năng: phát âm, ngữ điệu, lưu loát, tốc độ)
 - Một chủ đề tiếng Anh nên luyện thêm (ví dụ: Du lịch, Khoa học, Tin tức, Thám hiểm…)
+- Một đoạn văn mẫu phù hợp để luyện thêm (viết bằng tiếng Anh, độ dài khoảng 1-2 câu)
 
 Chỉ trả về kết quả đúng định dạng JSON, không markdown, không giải thích:
 
 {
   "focus": "ngữ điệu",
   "topic": "Khoa học",
-  "suggestion": "Bạn nói khá trôi chảy nhưng còn đơn điệu về ngữ điệu. Hãy luyện thêm các bài đọc thuộc chủ đề khoa học để nâng cao khả năng diễn đạt cảm xúc."
+  "suggestion": "Climate change is one of the biggest challenges facing our planet today."
 }
 
 Dưới đây là lịch sử luyện tập (tối đa 3 bản ghi gần nhất):
@@ -29,12 +30,11 @@ Dưới đây là lịch sử luyện tập (tối đa 3 bản ghi gần nhất)
 function buildPrompt(records) {
   const transcriptWithScores = records
     .map((r, i) => {
-      return `#${i + 1}
-Transcript: ${r.transcript}
-Score: ${r.score_overall}
-`;
+      return `#${i + 1}\nTranscript: ${r.transcript}\nScore: ${
+        r.score_overall
+      }`;
     })
-    .join("\n");
+    .join("\n\n");
 
   return PROMPT_TEMPLATE.replace(
     "{{transcriptWithScores}}",

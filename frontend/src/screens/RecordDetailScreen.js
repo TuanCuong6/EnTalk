@@ -1,3 +1,4 @@
+//frontend/src/screens/RecordDetailScreen.js
 import React, { useState, useEffect, useRef } from 'react';
 import {
   View,

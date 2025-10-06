@@ -13,4 +13,3 @@ npx react-native run-android
 -- terminal 4:
 cd frontend
 npx react-native log-android (xem log react native)
-

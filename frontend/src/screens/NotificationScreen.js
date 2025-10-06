@@ -1,3 +1,4 @@
+//frontend/src/screens/NotificationScreen.js
 import React, { useEffect, useState, useCallback, useContext } from 'react';
 import {
   View,
@@ -7,7 +8,6 @@ import {
   ActivityIndicator,
   StyleSheet,
   RefreshControl,
-  Image,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -15,7 +15,7 @@ import {
   getNotificationList,
   markNotificationAsRead,
 } from '../api/notification';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { navigate, navigationRef } from '../utils/RootNavigation';
 import { NotificationContext } from '../context/NotificationContext';
 import { CommonActions } from '@react-navigation/native';
@@ -24,7 +24,9 @@ export default function NotificationScreen() {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const { fetchUnreadCount } = useContext(NotificationContext);
+
+  const { fetchUnreadCount, shouldReload } = useContext(NotificationContext);
+  const navigation = useNavigation();
 
   const fetchNotifications = async () => {
     try {
@@ -43,11 +45,25 @@ export default function NotificationScreen() {
     fetchNotifications();
   };
 
+  // Khi vào lại màn hình từ ngoài (focus effect)
   useFocusEffect(
     useCallback(() => {
       fetchNotifications();
     }, []),
   );
+
+  // Khi có FCM mới đến (trigger reload)
+  useEffect(() => {
+    fetchNotifications();
+  }, [shouldReload]);
+
+  // Khi ấn lại vào tab icon
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('tabPress', () => {
+      onRefresh();
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   const handlePress = async item => {
     try {
@@ -130,13 +146,11 @@ export default function NotificationScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Background gradient */}
       <LinearGradient
         colors={['#F0F7FF', '#E6FCFF']}
         style={styles.background}
       />
 
-      {/* Header */}
       <View style={styles.header}>
         <View style={styles.logoContainer}>
           <Text style={styles.logo}>EnTalk</Text>
@@ -176,7 +190,6 @@ export default function NotificationScreen() {
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

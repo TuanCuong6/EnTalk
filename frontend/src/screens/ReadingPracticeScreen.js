@@ -102,7 +102,7 @@ export default function ReadingPracticeScreen({ route, navigation }) {
     return (
       <View style={styles.container}>
         <LinearGradient
-          colors={['#F0F7FF', '#E6FCFF']}
+          colors={['#F0F7FF', '#020f10ff']}
           style={styles.background}
         />
         <ActivityIndicator

@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useRef } from 'react';
+//frontend/src/screens/TopicListScreen.js
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -8,14 +9,12 @@ import {
   Alert,
   StyleSheet,
   Image,
-  Animated,
   ScrollView,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { fetchAllTopics } from '../api/reading';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { Easing } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const topicImages = {
@@ -43,8 +42,6 @@ export default function TopicListScreen() {
   const [topics, setTopics] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const rotateAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     const loadTopics = async () => {
@@ -58,35 +55,12 @@ export default function TopicListScreen() {
       }
     };
     loadTopics();
-
-    // Fade in animation
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 800,
-      useNativeDriver: true,
-    }).start();
-
-    // Rotate animation for logo
-    Animated.loop(
-      Animated.timing(rotateAnim, {
-        toValue: 1,
-        duration: 10000,
-        easing: Easing.linear,
-        useNativeDriver: true,
-      }),
-    ).start();
   }, []);
 
   const getImageForTopic = topic => {
     const key = removeVietnameseTones(topic.name);
     return topicImages[key] || require('../assets/topics/default.png');
   };
-
-  // Rotate animation interpolation
-  const rotateInterpolation = rotateAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '360deg'],
-  });
 
   if (loading)
     return (
@@ -96,25 +70,14 @@ export default function TopicListScreen() {
     );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={styles.container}
+      edges={['top', 'left', 'right', 'bottom']}
+    >
       {/* Background gradient */}
       <LinearGradient
         colors={['#F0F7FF', '#E6FCFF']}
         style={StyleSheet.absoluteFill}
-      />
-
-      {/* Decorative circles */}
-      <Animated.View
-        style={[
-          styles.circle1,
-          { transform: [{ rotate: rotateInterpolation }] },
-        ]}
-      />
-      <Animated.View
-        style={[
-          styles.circle2,
-          { transform: [{ rotate: rotateInterpolation }] },
-        ]}
       />
 
       {/* Header */}
@@ -159,7 +122,7 @@ export default function TopicListScreen() {
               </View>
             </TouchableOpacity>
           )}
-          contentContainerStyle={styles.listContainer}
+          contentContainerStyle={[styles.listContainer, { flexGrow: 1 }]}
         />
       </View>
     </SafeAreaView>
@@ -171,27 +134,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
+    flex: 1,
     paddingHorizontal: 20,
     paddingTop: 10,
-    zIndex: 10,
-  },
-  circle1: {
-    position: 'absolute',
-    width: 300,
-    height: 300,
-    borderRadius: 150,
-    backgroundColor: 'rgba(94, 114, 235, 0.05)',
-    top: -100,
-    left: -100,
-  },
-  circle2: {
-    position: 'absolute',
-    width: 200,
-    height: 200,
-    borderRadius: 100,
-    backgroundColor: 'rgba(255, 107, 107, 0.05)',
-    bottom: -50,
-    right: -50,
   },
   header: {
     flexDirection: 'row',
@@ -199,7 +144,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 25,
     paddingBottom: 15,
-    zIndex: 20,
   },
   backButton: {
     padding: 8,

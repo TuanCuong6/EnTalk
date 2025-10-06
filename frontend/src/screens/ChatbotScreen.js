@@ -1,3 +1,4 @@
+//frontend/src/screens/ChatbotScreen.js
 import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
@@ -9,9 +10,11 @@ import {
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
+  Keyboard,
 } from 'react-native';
 import { askChatbot, fetchChatHistory } from '../api/chat';
 import LinearGradient from 'react-native-linear-gradient';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export default function ChatbotScreen() {
   const [question, setQuestion] = useState('');
@@ -24,7 +27,11 @@ export default function ChatbotScreen() {
   }, []);
 
   useEffect(() => {
-    flatListRef.current?.scrollToEnd({ animated: true });
+    if (messages.length > 0) {
+      setTimeout(() => {
+        flatListRef.current?.scrollToEnd({ animated: true });
+      }, 300);
+    }
   }, [messages]);
 
   const loadHistory = async () => {
@@ -59,6 +66,7 @@ export default function ChatbotScreen() {
     const userMessage = { question, answer: null, id: Date.now() };
     setMessages(prev => [...prev, userMessage]);
     setQuestion('');
+    Keyboard.dismiss();
     setLoading(true);
 
     try {
@@ -74,6 +82,20 @@ export default function ChatbotScreen() {
     }
   };
 
+  const formatAnswer = text => {
+    if (!text) return '';
+    return text
+      .trim()
+      .replace(/\n{2,}/g, '\n')
+      .replace(/\\n/g, '\n')
+      .replace(/•/g, '• ')
+      .replace(/\*\*(.*?)\*\*/g, '$1')
+      .replace(/\*/g, '')
+      .replace(/`/g, '')
+      .replace(/^- /gm, '• ')
+      .replace(/^\d+\. /gm, '• ');
+  };
+
   const renderItem = ({ item }) => (
     <>
       <View style={[styles.chatBlock, styles.alignRight]}>
@@ -81,7 +103,7 @@ export default function ChatbotScreen() {
       </View>
       {item.answer && (
         <View style={[styles.chatBlock, styles.alignLeft]}>
-          <Text style={styles.botText}>🤖 {item.answer}</Text>
+          <Text style={styles.botText}>🤖 {formatAnswer(item.answer)}</Text>
         </View>
       )}
     </>
@@ -91,14 +113,16 @@ export default function ChatbotScreen() {
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}
     >
-      {/* Nền gradient nhẹ */}
       <LinearGradient
         colors={['#F0F7FF', '#E6FCFF']}
         style={StyleSheet.absoluteFill}
       />
 
-      <Text style={styles.title}>🤖 Hỏi EnTalk về tiếng Anh</Text>
+      <View style={styles.header}>
+        <Text style={styles.title}>🤖 Hỏi EnTalk về tiếng Anh</Text>
+      </View>
 
       <FlatList
         ref={flatListRef}
@@ -106,6 +130,10 @@ export default function ChatbotScreen() {
         renderItem={renderItem}
         keyExtractor={(item, index) => item.id?.toString() || index.toString()}
         contentContainerStyle={styles.list}
+        onContentSizeChange={() =>
+          flatListRef.current?.scrollToEnd({ animated: true })
+        }
+        ListFooterComponent={<View style={{ height: 20 }} />} 
       />
 
       <View style={styles.inputContainer}>
@@ -115,6 +143,9 @@ export default function ChatbotScreen() {
           value={question}
           onChangeText={setQuestion}
           placeholderTextColor="#888"
+          multiline
+          blurOnSubmit={false}
+          onSubmitEditing={handleSend}
         />
         <TouchableOpacity
           style={styles.sendButton}
@@ -124,7 +155,7 @@ export default function ChatbotScreen() {
           {loading ? (
             <ActivityIndicator color="#fff" />
           ) : (
-            <Text style={styles.sendText}>Gửi</Text>
+            <Ionicons name="send" size={20} color="#fff" />
           )}
         </TouchableOpacity>
       </View>
@@ -135,78 +166,84 @@ export default function ChatbotScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#F0F7FF',
+  },
+  header: {
     paddingTop: 60,
     paddingHorizontal: 16,
-    backgroundColor: '#F0F7FF',
+    paddingBottom: 12,
   },
   title: {
     fontSize: 22,
     fontWeight: '800',
     color: '#5E72EB',
     textAlign: 'center',
-    marginBottom: 16,
   },
   list: {
-    paddingBottom: 100,
+    paddingHorizontal: 16,
+    paddingBottom: 10,
   },
   chatBlock: {
     borderRadius: 16,
-    padding: 12,
+    padding: 14,
     marginVertical: 6,
-    maxWidth: '80%',
+    maxWidth: '85%',
     shadowColor: '#000',
-    shadowOpacity: 0.06,
+    shadowOpacity: 0.08,
     shadowOffset: { width: 0, height: 2 },
-    elevation: 2,
+    shadowRadius: 4,
+    elevation: 3,
   },
   alignLeft: {
     alignSelf: 'flex-start',
-    backgroundColor: 'rgba(255,255,255,0.8)',
+    backgroundColor: '#FFFFFF',
+    borderTopLeftRadius: 4,
   },
   alignRight: {
     alignSelf: 'flex-end',
     backgroundColor: '#DDE9FF',
+    borderTopRightRadius: 4,
   },
   userText: {
     fontWeight: '600',
-    color: '#34495E',
+    color: '#2C3E50',
     fontSize: 15,
+    lineHeight: 22,
   },
   botText: {
-    color: '#333',
+    color: '#2C3E50',
     fontSize: 15,
+    lineHeight: 24,
   },
   inputContainer: {
     flexDirection: 'row',
-    position: 'absolute',
-    bottom: 20,
-    left: 16,
-    right: 16,
+    padding: 10,
     backgroundColor: 'rgba(255,255,255,0.95)',
-    borderRadius: 30,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 4,
+    borderTopWidth: 1,
+    borderTopColor: '#E0E0E0',
     alignItems: 'center',
+    paddingHorizontal: 14,
   },
   input: {
     flex: 1,
-    fontSize: 14,
+    fontSize: 15,
     color: '#333',
-    paddingVertical: Platform.OS === 'ios' ? 10 : 8,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 24,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    minHeight: 44,
+    maxHeight: 100,
+    textAlignVertical: 'center',
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
   },
   sendButton: {
     backgroundColor: '#5E72EB',
-    borderRadius: 20,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    marginLeft: 8,
-  },
-  sendText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    borderRadius: 24,
+    padding: 10,
+    marginLeft: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

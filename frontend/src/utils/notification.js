@@ -1,9 +1,14 @@
 //frontend/src/utils/notification.js
 import messaging from '@react-native-firebase/messaging';
-import { Alert, AppState } from 'react-native';
+import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { saveFcmToken } from '../api/notification';
 import { navigate } from './RootNavigation';
+
+import {
+  getGlobalFetchUnreadCount,
+  triggerNotificationReload,
+} from '../context/NotificationContext';
 
 export async function setupFCM() {
   try {
@@ -23,10 +28,14 @@ export async function setupFCM() {
       console.log('🔥 Đã gửi FCM token lên server:', fcmToken);
     }
 
-    // 👉 Foreground: app đang mở
+    // 👉 Foreground
     messaging().onMessage(async remoteMessage => {
       const { title, body } = remoteMessage.notification || {};
       const data = remoteMessage.data || {};
+
+      // 🔁 Gọi cập nhật badge + reload danh sách
+      getGlobalFetchUnreadCount?.()();
+      triggerNotificationReload?.();
 
       Alert.alert(title || 'Thông báo', body, [
         {
@@ -37,12 +46,12 @@ export async function setupFCM() {
       ]);
     });
 
-    // 👉 Background: app mở nhưng ở nền
+    // 👉 Background
     messaging().setBackgroundMessageHandler(async remoteMessage => {
       console.log('📩 [Background] Message:', remoteMessage);
     });
 
-    // 👉 Quit: app tắt hẳn, được mở lại từ thông báo
+    // 👉 App quit
     const initialMessage = await messaging().getInitialNotification();
     if (initialMessage) {
       console.log('🚀 [InitialNotification] from quit state:', initialMessage);

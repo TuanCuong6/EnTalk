@@ -35,13 +35,17 @@ exports.askQuestion = async (req, res) => {
       [userId, message]
     );
 
-    // Prompt gộp cả kiểm tra lẫn trả lời
+    // Prompt kiểm tra lẫn trả lời
     const prompt = `
-Bạn là trợ lý chuyên môn tiếng Anh. Nhiệm vụ:
-1. Nếu câu hỏi sau KHÔNG liên quan đến học tiếng Anh (ví dụ: ngữ pháp, từ vựng, luyện thi IELTS/TOEIC, cách học, phát âm, dịch thuật, viết tiếng Anh,...), hãy trả lời đúng một câu duy nhất:
+Bạn là trợ lý chuyên môn tiếng Anh. Yêu cầu:
+
+1. Nếu câu hỏi KHÔNG liên quan đến tiếng Anh (ngữ pháp, từ vựng, phát âm, viết, dịch...), trả lời duy nhất:
 "Xin lỗi, tôi chỉ hỗ trợ các câu hỏi liên quan đến học tiếng Anh."
 
-2. Nếu liên quan, hãy trả lời ngắn gọn, rõ ràng, dễ hiểu, có thể kèm ví dụ nếu cần.
+2. Nếu CÓ liên quan, hãy trả lời:
+- Ngắn gọn (dưới 12 dòng)
+- Dễ hiểu, ngôn ngữ đơn giản
+- Có thể kèm ví dụ nếu cần
 
 Câu hỏi của người dùng:
 ${message}
